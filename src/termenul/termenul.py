@@ -13,6 +13,7 @@ class Termenul:
         try:
             while True:
                 if self.screen.resize():
+                    print('aa')
                     print(self.screen.height, self.screen.width)
                 await asyncio.sleep(0.5)
         except asyncio.CancelledError:
