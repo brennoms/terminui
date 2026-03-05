@@ -1,14 +1,20 @@
 class Content:
     
-    def __init__(self, orientation='tb', alignment='center', padding_x=0, padding_y=0, background_color='black', text_color='black', text=None):
+    def __init__(self, orientation='tb', alignment='center', width='auto', height='auto', padding_x=0, padding_y=0, background_color='black', text_color='black', text=None):
         self.super = None
+        
+        
         self.orientation = orientation
-        self.alignment = alignment
+        self.width = width
+        self.height = height
         self.padding_x = padding_x
         self.padding_y = padding_y
+
+        self.text = text
+        self.alignment = alignment
         self.background_color = background_color
         self.text_color = text_color
-        self.text = text
+        
         self._contents = []
     
     def addContent(self, content):
