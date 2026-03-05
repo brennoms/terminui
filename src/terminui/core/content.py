@@ -1,4 +1,5 @@
 from terminui.core.util.textBlock import textBlock
+import terminui.core.util.ANSI as ANSI
 
 
 class Content:
@@ -73,8 +74,11 @@ class Content:
 
 
     def render(self):
-        square = 
-
+        if len(self._contents) > 0:
+            self.renderContents()
+        else:
+            pos = [self.pos_x+self.padding_x, self.pos_y+self.padding_y]
+            self.text_block.posText(pos)
 
 
     def renderContents(self):

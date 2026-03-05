@@ -7,6 +7,9 @@ class textBlock:
             if len(line) > self.columns:
                 self.columns = len(line)
             self.lines += 1
+    
+    def posText(pos, size='full'):
+        pass
 
 if __name__ == "__main__":
     string = 'aaaaa\naa\naaa'
