@@ -1,4 +1,6 @@
-from src.terminui.termenul import Termenul
+from terminui.terminui import Terminui
+from terminui.core.content import Content
 
-termenul = Termenul()
-termenul.start()
+terminui = Terminui()
+terminui.addContent(Content())
+terminui.start()

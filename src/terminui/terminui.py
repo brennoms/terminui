@@ -1,11 +1,13 @@
 import asyncio
 
 from terminui.core.screen import Screen
+from terminui.core.content import Content
 
 
-class Termenul:
+class Terminui(Content):
 
     def __init__(self):
+        super().__init__()
         self.screen = Screen()
         self.menus = {}
 
@@ -13,7 +15,6 @@ class Termenul:
         try:
             while True:
                 if self.screen.resize():
-                    print('aa')
                     print(self.screen.height, self.screen.width)
                 await asyncio.sleep(0.5)
         except asyncio.CancelledError:
@@ -25,12 +26,8 @@ class Termenul:
             asyncio.run(self._run())
         except KeyboardInterrupt:
             pass
-    
-    def addMenu(self, menu):
-        self.menus[menu.__class__.__name__] = menu
-        menu.termenul = self
 
 
 if __name__ == '__main__':
-    termenul = Termenul()
+    termenul = Terminui()
     termenul.start()
