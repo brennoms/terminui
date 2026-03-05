@@ -32,6 +32,9 @@ class ReloadHandler(FileSystemEventHandler):
 @click.argument("app", default="main.py")
 def dev(app):
 
+    if os.environ.get("TERMINUI_WORKER") == "true":
+        return
+
     worker = None
 
     def start_worker():

@@ -8,7 +8,9 @@ class Terminui(Content):
 
     def __init__(self):
         super().__init__()
+        self.position = [0,0]
         self.terminal_size_before = None
+        self.resize()
         self.menus = {}
 
     def resize(self):
