@@ -19,35 +19,44 @@ class Content:
         self.padding_x = padding_x
         self.padding_y = padding_y
 
-        if type(text) == str:
-            self.text = text
-            self.text_block = textBlock(text)
-        else:
-            self.text = None
-            self.text_block = None
+        self.setText(text)
         self.alignment = alignment
         self.background_color = background_color
         self.text_color = text_color
         
         self._contents = []
 
-        if width == 'auto':
-            self._autoWidth()
-        if height == 'auto':
-            self._autoHeight()
+        self.autoSize()
     
+
+    def setText(self, text):
+        if type(text) == str:
+            self.text = text
+            self.text_block = textBlock(text)
+        else:
+            self.text = None
+            self.text_block = None
+    
+
+    def autoSize(self):
+        if self.width == 'auto':
+            self._autoWidth()
+        if self.height == 'auto':
+            self._autoHeight()
+
     def _autoWidth(self):
         if self.text_block != None:
-            self.width = self.text_block.columns
+            self.width = self.text_block.columns + 2*self.padding_x
         else:
             self.width = 0
 
     def _autoHeight(self):
         if self.text_block != None:
-            self.width = self.text_block.lines
+            self.width = self.text_block.lines + 2*self.padding_y
         else:
             self.width = 0
     
+
     def addContent(self, content):
         if isinstance(content, Content):
             content.father = self
@@ -59,11 +68,9 @@ class Content:
             raise Exception('Content.addContent(), only accepts an instance of the Content class as a parameter')
     
     def removeContent(self, content):
-        try:
-            self._contents.remove(content)
-        except:
-            return False
+        self._contents.remove(content)
     
+
     def autoPosition(self):
         if self.father.orientation == 'tb':
             self.pos_x = self.father.pos_x
@@ -72,14 +79,13 @@ class Content:
             self.pos_x = self.father.pos_x + self.father.used_x
             self.pos_y = self.father.pos_y
 
-
     def render(self):
         if len(self._contents) > 0:
             self.renderContents()
         else:
+            #pintar background
             pos = [self.pos_x+self.padding_x, self.pos_y+self.padding_y]
             self.text_block.posText(pos)
-
 
     def renderContents(self):
         for content in self._contents:
