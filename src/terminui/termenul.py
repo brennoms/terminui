@@ -1,6 +1,6 @@
 import asyncio
 
-from termenul.core.screen import Screen
+from terminui.core.screen import Screen
 
 
 class Termenul:

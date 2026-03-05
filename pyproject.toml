@@ -1,9 +1,9 @@
 [project]
-name = "termenul"
+name = "terminui"
 version = "0.1.0"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [project.scripts]
-termenul = "termenul.cli:main"
+terminui = "terminui.cli:main"

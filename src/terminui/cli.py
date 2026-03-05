@@ -1,5 +1,5 @@
 import click
-from termenul import dev
+from terminui import dev
 
 @click.group()
 def main():
