@@ -1,0 +1,9 @@
+[project]
+name = "terminui"
+version = "0.1.0"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+terminui = "terminui.cli:main"
