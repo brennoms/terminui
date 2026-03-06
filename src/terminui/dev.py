@@ -50,7 +50,7 @@ def dev(app):
             env={**os.environ, "TERMINUI_WORKER": "true"}
         )
 
-        start_worker()
+    start_worker()
 
     observer = Observer()
     handler = ReloadHandler(start_worker)
