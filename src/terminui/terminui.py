@@ -4,7 +4,7 @@ import sys
 import os
 
 from terminui.core.content import Content
-from terminui.core.util.ANSI import ANSI
+from terminui.core.ANSI import ANSI
 
 if sys.platform == "win32":
     import msvcrt
@@ -72,7 +72,7 @@ class Terminui(Content):
                 self.render()
                 await asyncio.sleep(0.5)
         except asyncio.CancelledError:
-            print("\nClosing mainContent...")
+            print("\nClosing Contents...")
             raise
     
     async def _tasks(self):
@@ -80,6 +80,7 @@ class Terminui(Content):
         task2 = asyncio.create_task(self.keyboardEntry())
 
         await asyncio.gather(task1, task2)
+        
 
     def start(self):
         ANSI.hide_cursor()

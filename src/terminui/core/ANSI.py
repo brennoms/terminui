@@ -6,9 +6,6 @@ class ANSI:
 
     ESC = "\033["
 
-    # =========================
-    # STANDARD COLORS
-    # =========================
     colors = {
         "black": 30,
         "red": 31,
@@ -179,28 +176,22 @@ class ANSI:
         sys.stdout.write("\033[u")
 
     # =========================
-    # CLEAR SCREEN
+    # CLEAR SCREEN *don't work 
     # =========================
     @staticmethod
     def clear():
         sys.stdout.write(f"{ANSI.ESC}2J")
         ANSI.flush()
-        
-    @staticmethod
-    def clear_to_line(line):
-        ANSI.move_to(0,0)
-        for i in range(line):
-            ANSI.clear_line()
-            ANSI.down(0)
-        ANSI.flush()
 
     @staticmethod
     def clear_line():
         sys.stdout.write(f"{ANSI.ESC}2K")
+        ANSI.flush()
 
     @staticmethod
     def clear_to_end():
         sys.stdout.write(f"{ANSI.ESC}K")
+        ANSI.flush()
 
     # =========================
     # CURSOR VISIBILITY
@@ -208,10 +199,12 @@ class ANSI:
     @staticmethod
     def hide_cursor():
         sys.stdout.write("\033[?25l")
+        ANSI.flush()
 
     @staticmethod
     def show_cursor():
         sys.stdout.write("\033[?25h")
+        ANSI.flush()
 
     # =========================
     # BEEP
