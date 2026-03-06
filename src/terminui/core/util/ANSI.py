@@ -150,6 +150,22 @@ class ANSI:
         sys.stdout.write(f'{ANSI.ESC}{row};{col}H{text}{ANSI.reset()}')
         ANSI.flush()
 
+    @staticmethod
+    def up(n=1):
+        sys.stdout.write(f"{ANSI.ESC}{n}A")
+
+    @staticmethod
+    def down(n=1):
+        sys.stdout.write(f"{ANSI.ESC}{n}B")
+
+    @staticmethod
+    def right(n=1):
+        sys.stdout.write(f"{ANSI.ESC}{n}C")
+
+    @staticmethod
+    def left(n=1):
+        sys.stdout.write(f"{ANSI.ESC}{n}D")
+
 
     # =========================
     # SAVE / RESTORE CURSOR
@@ -168,6 +184,14 @@ class ANSI:
     @staticmethod
     def clear():
         sys.stdout.write(f"{ANSI.ESC}2J")
+        ANSI.flush()
+        
+    @staticmethod
+    def clear_to_line(line):
+        ANSI.move_to(0,0)
+        for i in range(line):
+            ANSI.clear_line()
+            ANSI.down(0)
         ANSI.flush()
 
     @staticmethod
