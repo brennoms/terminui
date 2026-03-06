@@ -2,7 +2,7 @@
 import sys
 
 
-class ANSIText:
+class ANSI:
 
     ESC = "\033["
 
@@ -58,104 +58,98 @@ class ANSIText:
             return color
 
         if bg:
-            return ANSIText.bg_colors.get(color, 49)
+            return ANSI.bg_colors.get(color, 49)
         else:
-            return ANSIText.colors.get(color, 39)
+            return ANSI.colors.get(color, 39)
 
     # =========================
     # RESET
     # =========================
     @staticmethod
     def reset():
-        return f"{ANSIText.ESC}0m"
+        return f"{ANSI.ESC}0m"
+    
+    @staticmethod
+    def flush():
+        sys.stdout.flush()
 
     # =========================
     # TEXT COLORS
     # =========================
     @staticmethod
     def color(text, color):
-        code = ANSIText._get_color_code(color)
-        return f"{ANSIText.ESC}{code}m{text}{ANSIText.reset()}"
+        code = ANSI._get_color_code(color)
+        return f"{ANSI.ESC}{code}m{text}{ANSI.reset()}"
 
     # =========================
     # BACKGROUND COLORS
     # =========================
     @staticmethod
     def bg(text, color):
-        code = ANSIText._get_color_code(color, bg=True)
-        return f"{ANSIText.ESC}{code}m{text}{ANSIText.reset()}"
+        code = ANSI._get_color_code(color, bg=True)
+        return f"{ANSI.ESC}{code}m{text}{ANSI.reset()}"
 
     # =========================
     # STYLES
     # =========================
     @staticmethod
     def bold(text):
-        return f"{ANSIText.ESC}1m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}1m{text}{ANSI.reset()}"
 
     @staticmethod
     def italic(text):
-        return f"{ANSIText.ESC}3m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}3m{text}{ANSI.reset()}"
 
     @staticmethod
     def underline(text):
-        return f"{ANSIText.ESC}4m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}4m{text}{ANSI.reset()}"
 
     @staticmethod
     def blink(text):
-        return f"{ANSIText.ESC}5m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}5m{text}{ANSI.reset()}"
 
     @staticmethod
     def inverse(text):
-        return f"{ANSIText.ESC}7m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}7m{text}{ANSI.reset()}"
 
     @staticmethod
     def strike(text):
-        return f"{ANSIText.ESC}9m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}9m{text}{ANSI.reset()}"
 
     # =========================
     # 256 COLORS
     # =========================
     @staticmethod
     def color256(text, color):
-        return f"{ANSIText.ESC}38;5;{color}m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}38;5;{color}m{text}{ANSI.reset()}"
 
     @staticmethod
     def bg256(text, color):
-        return f"{ANSIText.ESC}48;5;{color}m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}48;5;{color}m{text}{ANSI.reset()}"
 
     # =========================
     # TRUE COLOR (RGB)
     # =========================
     @staticmethod
     def rgb(text, r, g, b):
-        return f"{ANSIText.ESC}38;2;{r};{g};{b}m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}38;2;{r};{g};{b}m{text}{ANSI.reset()}"
 
     @staticmethod
     def bg_rgb(text, r, g, b):
-        return f"{ANSIText.ESC}48;2;{r};{g};{b}m{text}{ANSIText.reset()}"
+        return f"{ANSI.ESC}48;2;{r};{g};{b}m{text}{ANSI.reset()}"
 
     # =========================
     # CURSOR POSITION
     # =========================
     @staticmethod
     def move_to(row, col):
-        sys.stdout.write(f"{ANSIText.ESC}{row};{col}H")
+        sys.stdout.write(f"{ANSI.ESC}{row};{col}H")
+        ANSI.flush()
+    
+    def writePos(text, row, col):
+        sys.stdout.write(f'{ANSI.ESC}{row};{col}H{text}{ANSI.reset()}')
+        ANSI.flush()
 
-    @staticmethod
-    def up(n=1):
-        sys.stdout.write(f"{ANSIText.ESC}{n}A")
-
-    @staticmethod
-    def down(n=1):
-        sys.stdout.write(f"{ANSIText.ESC}{n}B")
-
-    @staticmethod
-    def right(n=1):
-        sys.stdout.write(f"{ANSIText.ESC}{n}C")
-
-    @staticmethod
-    def left(n=1):
-        sys.stdout.write(f"{ANSIText.ESC}{n}D")
 
     # =========================
     # SAVE / RESTORE CURSOR
@@ -173,15 +167,16 @@ class ANSIText:
     # =========================
     @staticmethod
     def clear():
-        sys.stdout.write(f"{ANSIText.ESC}2J")
+        sys.stdout.write(f"{ANSI.ESC}2J")
+        ANSI.flush()
 
     @staticmethod
     def clear_line():
-        sys.stdout.write(f"{ANSIText.ESC}2K")
+        sys.stdout.write(f"{ANSI.ESC}2K")
 
     @staticmethod
     def clear_to_end():
-        sys.stdout.write(f"{ANSIText.ESC}K")
+        sys.stdout.write(f"{ANSI.ESC}K")
 
     # =========================
     # CURSOR VISIBILITY
@@ -199,5 +194,6 @@ class ANSIText:
     # =========================
     @staticmethod
     def beep():
-        sys.stdout.write("\a")
+        sys.stdout.write(f"\a{ANSI.reset()}")
+        ANSI.flush()
     

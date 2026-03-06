@@ -43,30 +43,30 @@ def dev(app):
         if worker:
             worker.terminate()
             worker.wait()
-
+        
         print("Iniciando worker...")
         worker = subprocess.Popen(
             [sys.executable, app],
             env={**os.environ, "TERMINUI_WORKER": "true"}
         )
 
-    start_worker()
+        start_worker()
 
-    observer = Observer()
-    handler = ReloadHandler(start_worker)
+        observer = Observer()
+        handler = ReloadHandler(start_worker)
 
-    observer.schedule(handler, os.getcwd(), recursive=True)
-    observer.start()
+        observer.schedule(handler, os.getcwd(), recursive=True)
+        observer.start()
 
-    print("Modo dev ativo (hot reload)")
+        print("Modo dev ativo (hot reload)")
 
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            observer.stop()
 
-    if worker:
-        worker.terminate()
+        if worker:
+            worker.terminate()
 
-    observer.join()
+        observer.join()
