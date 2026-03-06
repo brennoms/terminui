@@ -66,7 +66,6 @@ class Terminui(Content):
         try:
             while self.running:
                 if self.resize() or self.reset:
-                    self.resize()
                     self.reset = False
                 clearTerminal()
                 self.render()
