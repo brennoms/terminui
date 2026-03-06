@@ -24,20 +24,7 @@ class Terminui(Content):
         super().__init__()
         self.reset = False
         self.terminal_size_before = None
-        self.setMainContent(Content())
         self.resize()
-
-    def setMainContent(self, content):
-        self.mainContent = content
-
-    def resizeMainContent(self):
-        self.mainContent.width = self.width
-        self.mainContent.height = self.height
-        self.mainContent.pos_x = self.pos_x
-        self.mainContent.pos_y = self.pos_y
-
-    def render(self):
-        self.mainContent.render()
 
     def resize(self):
         terminal_size = shutil.get_terminal_size()
@@ -45,7 +32,6 @@ class Terminui(Content):
             self.width = terminal_size.columns
             self.height = terminal_size.lines
             self.terminal_size_before = terminal_size
-            self.resizeMainContent()
             return True
         return False
 

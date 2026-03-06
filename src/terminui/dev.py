@@ -52,21 +52,21 @@ def dev(app):
 
         start_worker()
 
-        observer = Observer()
-        handler = ReloadHandler(start_worker)
+    observer = Observer()
+    handler = ReloadHandler(start_worker)
 
-        observer.schedule(handler, os.getcwd(), recursive=True)
-        observer.start()
+    observer.schedule(handler, os.getcwd(), recursive=True)
+    observer.start()
 
-        print("Modo dev ativo (hot reload)")
+    print("Modo dev ativo (hot reload)")
 
-        try:
-            while True:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            observer.stop()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
 
-        if worker:
-            worker.terminate()
+    if worker:
+        worker.terminate()
 
-        observer.join()
+    observer.join()

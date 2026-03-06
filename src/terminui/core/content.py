@@ -17,8 +17,17 @@ class Content:
     
         self.background_color = background_color
 
+        self.contents = []
+
     def render(self):
-        box = textBlock('', width=self.width, height=self.height)
-        for i in range(len(box.lines)):
-            line = ANSI.bg(box.lines[i], 'blue')
-            ANSI.writePos(line, self.pos_y+i, self.pos_x)
+        for content in self.contents:
+            if isinstance(content, textBlock):
+                box = textBlock('', width=self.width, height=self.height)
+                for i in range(len(box.lines)):
+                    line = ANSI.bg(box.lines[i], 'blue')
+                    ANSI.writePos(line, self.pos_y+i, self.pos_x)
+            elif isinstance(content, Content):
+                content.render
+    
+    def addContent(self, content):
+        self.contents.append(content)
