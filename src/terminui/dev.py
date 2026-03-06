@@ -1,8 +1,11 @@
+#AI made
+
 import click
 import os
 import sys
 import time
 import subprocess
+import threading
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -20,11 +23,11 @@ class ReloadHandler(FileSystemEventHandler):
             return
 
         now = time.time()
-        if now - self.last < 0.5:
+        if now - self.last < 1:
             return
 
         self.last = now
-        print(f"Alteração detectada: {event.src_path}")
+        print(f"\nAlteração detectada: {event.src_path}")
         self.restart()
 
 
@@ -32,23 +35,33 @@ class ReloadHandler(FileSystemEventHandler):
 @click.argument("app", default="main.py")
 def dev(app):
 
-    if os.environ.get("TERMINUI_WORKER") == "true":
-        return
-
     worker = None
+
+    def stream_output(proc):
+        for line in proc.stdout:
+            print(line, end="")
 
     def start_worker():
         nonlocal worker
 
-        if worker:
+        if worker and worker.poll() is None:
+            print("Parando worker...")
             worker.terminate()
             worker.wait()
-        
+
         print("Iniciando worker...")
+
         worker = subprocess.Popen(
             [sys.executable, app],
-            env={**os.environ, "TERMINUI_WORKER": "true"}
+            text=True,
+            bufsize=1,
         )
+
+        threading.Thread(
+            target=stream_output,
+            args=(worker,),
+            daemon=True
+        ).start()
 
     start_worker()
 
@@ -59,11 +72,13 @@ def dev(app):
     observer.start()
 
     print("Modo dev ativo (hot reload)")
+    print("Observando alterações...\n")
 
     try:
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
+        print("\nEncerrando dev server...")
         observer.stop()
 
     if worker:

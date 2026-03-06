@@ -89,8 +89,3 @@ class Terminui(Content):
             asyncio.run(self._tasks())
         except KeyboardInterrupt:
             pass
-
-
-if __name__ == '__main__':
-    termenul = Terminui()
-    termenul.start()

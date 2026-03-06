@@ -34,11 +34,11 @@ class Content:
         self._background_color = color
 
 
-    def __init__(self, width=0, height=0, padding_x=0, padding_y=0, background_color='black'):
+    def __init__(self, pos_x=0, pos_y=0, width=0, height=0, padding_x=0, padding_y=0, background_color='black'):
         self.father = None
 
-        self.pos_x = 0
-        self.pos_y = 0
+        self.pos_x = pos_x
+        self.pos_y = pos_y
 
         self._width = width
         self._height = height
