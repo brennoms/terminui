@@ -5,6 +5,7 @@ import os
 
 from terminui.core.content import Content
 from terminui.core.ANSI import ANSI
+from terminui.mainInstance import MainInstance
 
 if sys.platform == "win32":
     import msvcrt
@@ -21,6 +22,7 @@ else:
 class Terminui(Content):
 
     def __init__(self):
+        MainInstance.setInstance(self)
         super().__init__()
         self.reset = False
         self.terminal_size_before = None

@@ -1,27 +1,10 @@
 from terminui.core.textBlock import textBlock
 from terminui.core.ANSI import ANSI
 from terminui.core.exceptions import ExceptionBgColor
+from terminui.mainInstance import MainInstance
 
 
 class Content:
-    
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
-    def width(self, value):
-        self._width = value
-        self._update_content()
-
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, value):
-        self._height = value
-        self._update_content()
     
     @property
     def background_color(self):
@@ -64,3 +47,27 @@ class Content:
     
     def addContent(self, content):
         self.contents.append(content)
+
+
+
+if __name__ == "__main__":
+    mainInstance = MainInstance.setInstance(Content())
+
+    content = Content()
+    content.size = (20, 10)
+    content.background_color = 'red'
+
+    print(content.father)
+    print(content.size)
+    print(content.pos_x)
+    print(content.pos_y)
+    print(content.padding_x)
+    print(content.padding_y)
+    print(content.background_color)
+    print(content.contents)
+
+    content.size.wdidth = 30
+    print(content.size)
+
+    mainInstance.addContent(content)
+    mainInstance.render()
