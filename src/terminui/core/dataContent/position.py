@@ -1,7 +1,7 @@
 class Pos:
     
-    def __init__(self, parent=None):
-        self._pos = [0, 0]
+    def __init__(self, parent=None, x=0, y=0):
+        self._pos = [x, y]
         self.parent = parent
 
     def _validate(self, value, name):
@@ -12,7 +12,7 @@ class Pos:
 
     def _changed(self):
         if self.parent is not None:
-            self.parent.whenPosChanged()
+            self.parent._whenPosChanged()
 
     @property
     def x(self):

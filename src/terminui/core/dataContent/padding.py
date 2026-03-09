@@ -1,7 +1,7 @@
 class Padding:
 
-    def __init__(self, parent=None):
-        self._padding = [0, 0]
+    def __init__(self, parent=None, x=0, y=0):
+        self._padding = [x, y]
         self.parent = parent
 
     def _validate(self, value, name):
@@ -12,7 +12,7 @@ class Padding:
 
     def _changed(self):
         if self.parent is not None:
-            self.parent.whenPaddingChanged()
+            self.parent._whenPaddingChanged()
 
     @property
     def x(self):

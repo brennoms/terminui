@@ -1,7 +1,7 @@
 class Size:
 
-    def __init__(self, parent=None):
-        self._size = [0, 0]
+    def __init__(self, parent=None, width=0, height=0):
+        self._size = [width, height]
         self.parent = parent
 
     def _validate(self, value, name):
@@ -12,7 +12,7 @@ class Size:
 
     def _changed(self):
         if self.parent is not None:
-            self.parent.whenSizeChanged()
+            self.parent._whenSizeChanged()
 
     @property
     def width(self):
