@@ -1,27 +1,34 @@
 from terminui.core.ANSI import ANSI
 
 class Color:
-    def __init__(self, color='white'):
-        self.color = color
-    
+    def __init__(self, *args):
+        if len(args) == 1:
+            args = args[0]
+        elif len(args) == 0:
+            args = 'white'
+        self.color = args
+
     @property
     def color(self):
         return self._color
+
     @color.setter
     def color(self, value):
-        if not isinstance(value, str):
-            if not isinstance(value, (list, tuple)) or len(value) != 3 or not all(isinstance(c, int) for c in value):
-                raise ValueError("RGB color must be a list or tuple of three integers")
+        if isinstance(value, str):
+            if value not in ANSI.colors:
+                raise ValueError(f'Color "{value}" is not a valid ANSI color')
+            self._color = value
+            self._schema = ['ANSI', 'ansi']
+            return
+        if isinstance(value, (list, tuple)):
+            if len(value) != 3 or not all(isinstance(c, int) for c in value):
+                raise ValueError("RGB color must contain three integers")
             if not all(0 <= c <= 255 for c in value):
                 raise ValueError("RGB values must be in the range 0-255")
             self._color = tuple(value)
             self._schema = ['rgb', 'RGB']
-        else:
-            #for compatibility with ANSI color names
-            if value not in ANSI.colors:
-                raise ValueError(f"Color '{value}' is not a valid ANSI color")
-            self._color = value
-            self._schema = ['ANSI', 'ansi']
+            return
+        raise ValueError("Invalid color format")
 
     @property
     def schema(self):
@@ -43,6 +50,10 @@ if __name__ == "__main__":
         color_rgb.color = (256, 0, 0)
     except ValueError as e:
         print(e)  # Output: "RGB value must be in the range 0-255"
+    try:
+        color_rgb.color = "not_a_color"
+    except ValueError as e:
+        print(e)  # Output: "RGB color must be a list or tuple of three integers"
 
     print()
 

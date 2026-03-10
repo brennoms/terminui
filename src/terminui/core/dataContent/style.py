@@ -1,11 +1,11 @@
-from terminui.core.colorClasses import Color
+from terminui.core.color import Color
 
 class Style:
 
     def __init__(self, parent=None, fg=None, bg=None, bold=False, italic=False, underline=False):
         self.parent = parent
-        self._fg = self._validate_color(fg) if fg is not None else Color("white")
-        self._bg = self._validate_color(bg) if bg is not None else Color("white")
+        self._fg = Color(fg) if fg is not None else Color()
+        self._bg = Color(bg) if bg is not None else Color()
         self._bold = bold if bold == True else False
         self._italic = italic if italic == True else False
         self._underline = underline if underline == True else False
@@ -19,16 +19,23 @@ class Style:
         return self._fg
     @fg.setter
     def fg(self, value):
-        self._fg = Color(value)
-        self._changed()
+        if isinstance(value, Color):
+            self._fg = value
+            self._changed()
+        else:
+            raise Exception('foreground only accepts an instance of Color class \n if you want change the color try fg.color = color')
 
     @property
     def bg(self):
         return self._bg
     @bg.setter
     def bg(self, value):
-        self._bg = Color(value)
-        self._changed()
+        if isinstance(value, Color):
+            self._bg = value
+            self._changed()
+        else:
+            raise Exception('background only accepts an instance of Color class \n if you want change the color try bg.color = color')
+
 
     @property
     def bold(self):
@@ -61,9 +68,11 @@ class Style:
 if __name__ == "__main__":
     style = Style()
     print(style)
-    style.fg = "red"
+    style.fg = Color('red')
+    style.bg = Color(0, 255, 0)
     print(style)
-    style.bg = (0, 255, 0)
+    style.fg.color = "green"
+    style.bg.color = 1, 2, 3
     print(style)
     style.bold = True
     print(style)
@@ -71,3 +80,4 @@ if __name__ == "__main__":
     print(style)
     style.underline = True
     print(style)
+    
