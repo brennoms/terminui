@@ -1,7 +1,11 @@
 from terminui.core.ANSI import ANSI
 
 class Color:
-    def __init__(self, *args):
+    def __init__(self, *args, **kargs):
+        if "parent" in kargs:
+            self.parent = kargs["parent"]
+        else:
+            self.parent = None
         if len(args) == 1:
             args = args[0]
         elif len(args) == 0:
@@ -19,6 +23,8 @@ class Color:
                 raise ValueError(f'Color "{value}" is not a valid ANSI color')
             self._color = value
             self._schema = ['ANSI', 'ansi']
+            if self.parent != None:
+                self.parent._changed()
             return
         if isinstance(value, (list, tuple)):
             if len(value) != 3 or not all(isinstance(c, int) for c in value):
@@ -27,6 +33,8 @@ class Color:
                 raise ValueError("RGB values must be in the range 0-255")
             self._color = tuple(value)
             self._schema = ['rgb', 'RGB']
+            if self.parent != None:
+                self.parent._changed()
             return
         raise ValueError("Invalid color format")
 

@@ -143,9 +143,8 @@ class ANSI:
         sys.stdout.write(f"{ANSI.ESC}{row};{col}H")
         ANSI.flush()
     
-    def writePos(text, row, col):
-        sys.stdout.write(f'{ANSI.ESC}{row};{col}H{text}{ANSI.reset()}')
-        ANSI.flush()
+    def text_pos(text, row, col):
+        return f'{ANSI.ESC}{row};{col}H{text}{ANSI.reset()}'
 
     @staticmethod
     def up(n=1):

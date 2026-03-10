@@ -12,7 +12,7 @@ class Size:
 
     def _changed(self):
         if self.parent is not None:
-            self.parent._whenSizeChanged()
+            self.parent._when_size_changed()
 
     @property
     def width(self):

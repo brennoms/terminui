@@ -2,17 +2,17 @@ from terminui.core.color import Color
 
 class Style:
 
-    def __init__(self, parent=None, fg=None, bg=None, bold=False, italic=False, underline=False):
+    def __init__(self, parent=None, bg=None, fg=None, bold=False, italic=False, underline=False):
         self.parent = parent
-        self._fg = Color(fg) if fg is not None else Color()
-        self._bg = Color(bg) if bg is not None else Color()
+        self._fg = Color(fg) if fg is not None else Color(parent=self)
+        self._bg = Color(bg) if bg is not None else Color(parent=self)
         self._bold = bold if bold == True else False
         self._italic = italic if italic == True else False
         self._underline = underline if underline == True else False
 
     def _changed(self):
         if self.parent is not None:
-            self.parent._whenStyleChanged()
+            self.parent._when_style_changed()
 
     @property
     def fg(self):
@@ -20,6 +20,7 @@ class Style:
     @fg.setter
     def fg(self, value):
         if isinstance(value, Color):
+            value._parent = self
             self._fg = value
             self._changed()
         else:
@@ -31,6 +32,7 @@ class Style:
     @bg.setter
     def bg(self, value):
         if isinstance(value, Color):
+            value._parent = self
             self._bg = value
             self._changed()
         else:
