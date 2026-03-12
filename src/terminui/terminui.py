@@ -5,7 +5,6 @@ import os
 
 from terminui.core.content import Content
 from terminui.core.ANSI import ANSI
-from terminui.mainInstance import MainInstance
 
 if sys.platform == "win32":
     import msvcrt
@@ -22,17 +21,16 @@ else:
 class Terminui(Content):
 
     def __init__(self):
-        MainInstance.setInstance(self)
         super().__init__()
-        self.reset = False
+        self.reset = True
         self.terminal_size_before = None
         self.resize()
 
     def resize(self):
         terminal_size = shutil.get_terminal_size()
         if terminal_size != self.terminal_size_before:
-            self.width = terminal_size.columns
-            self.height = terminal_size.lines
+            self.size.width = terminal_size.columns
+            self.size.height = terminal_size.lines
             self.terminal_size_before = terminal_size
             return True
         return False
@@ -67,11 +65,11 @@ class Terminui(Content):
     async def _run(self):
         try:
             while self.running:
-                if self.resize() or self.reset:
+                if  self.resize() or self.reset:
+                    clearTerminal()
+                    self.render()
                     self.reset = False
-                clearTerminal()
-                self.render()
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.1)
         except asyncio.CancelledError:
             print("\nClosing Contents...")
             raise

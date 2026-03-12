@@ -1,6 +1,5 @@
 import sys
 
-from terminui.mainInstance import MainInstance
 from terminui.core.data_content.position import Position
 from terminui.core.data_content.size import Size
 from terminui.core.data_content.padding import Padding
@@ -16,21 +15,48 @@ class Content:
         self.style = Style(self, bg, fg)
         
         self._contents = []
-        self._frame = []
-        self._changed()
+        self._reframe()
 
     def addContent(self, content):
         if isinstance(content, Content):
             self._contents.append(content)
     
-    def _changed(self):
-        self._reframe()
+    def changed(self):
+        pass
     
+    def _when_position_changed(self):
+        self.changed()
+        self.whenPosChanged()
+    def whenPosChanged(self):
+        pass
+
+    def _when_size_changed(self):
+        self.changed()
+        self.whenSizeChanged()
+    def whenSizeChanged(self):
+        pass
+
+    def _when_padding_changed(self):
+        self.changed()
+        self.whenPadChanged()
+    def whenPadChanged(self):
+        pass
+
+    def _when_style_changed(self):
+        self.changed()
+        self.whenStyleChanged()
+    def whenStyleChanged(self):
+        pass
+
     def _reframe(self):
         self._frame = []
         for line in range(self.size.height):
             l = []
             for collumn in range(self.size.width):
+                x = self.pos.x+collumn
+                y = self.pos.y+line
+                if x >= self.size.width+self.pos.x and y >= self.size.height+self.pos.y:
+                    continue
                 if line < self.pad.y:
                     string = ANSI.text_pos(' ', self.pos.x+collumn, self.pos.y+line)
                     l.append(string) #WIP
@@ -47,46 +73,23 @@ class Content:
                     string = ANSI.itallic(string)
                 if self.style.underline:
                     string = ANSI.underline(string)
-                string = ANSI.text_pos(string, self.pos.x+collumn, self.pos.y+line)
+                string = ANSI.text_pos(string, y, x)
+                sys.stdout.write(string)
                 l.append(string)
             self._frame.append(l)
-        
-    def _when_position_changed(self):
-        self._changed()
-        self.whenPosChanged()
-    def _when_size_changed(self):
-        self._changed()
-        self.whenSizeChanged()
-    def _when_padding_changed(self):
-        self._changed()
-        self.whenPadChanged()
-    def _when_style_changed(self):
-        self._changed()
-        self.whenStyleChanged()
-    def whenPosChanged(self):
-        pass
-    def whenSizeChanged(self):
-        pass
-    def whenPadChanged(self):
-        pass
-    def whenStyleChanged(self):
-        pass
+            sys.stdout.flush()
 
     def render(self):
-        for line in self._frame:
-            for collumn in line:
-                sys.stdout.write(collumn)
-        sys.stdout.flush()
+        self._reframe()
         for content in self._contents:
             if isinstance(content, Content):
                 content.render()
 
 if __name__ == "__main__":
     content = Content()
-    content.size.width = 5
+    content.size.width = 10
     content.size.height = 5
     content.pos.x = 10
     content.pos.y = 10
     content.style.bg.color = "red"
-    content.style.fg.color = "blue"
     content.render()
