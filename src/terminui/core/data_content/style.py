@@ -7,8 +7,8 @@ class Style:
         self._fg = Color(fg) if fg is not None else Color()
         self._bg = Color(bg) if bg is not None else Color()
         if self.parent != None:
-            self._fg.parent = self.parent
-            self._fg.parent = self.parent
+            self._fg.parent = self
+            self._bg.parent = self
         self._bold = bold if bold == True else False
         self._italic = italic if italic == True else False
         self._underline = underline if underline == True else False
