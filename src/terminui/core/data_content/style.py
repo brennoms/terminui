@@ -4,8 +4,11 @@ class Style:
 
     def __init__(self, parent=None, bg=None, fg=None, bold=False, italic=False, underline=False):
         self.parent = parent
-        self._fg = Color(fg) if fg is not None else Color(parent=self)
-        self._bg = Color(bg) if bg is not None else Color(parent=self)
+        self._fg = Color(fg) if fg is not None else Color()
+        self._bg = Color(bg) if bg is not None else Color()
+        if self.parent != None:
+            self._fg.parent = self.parent
+            self._fg.parent = self.parent
         self._bold = bold if bold == True else False
         self._italic = italic if italic == True else False
         self._underline = underline if underline == True else False
