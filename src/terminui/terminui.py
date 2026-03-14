@@ -69,7 +69,7 @@ class Terminui(Content):
                     clearTerminal()
                     self.render()
                     self.reset = False
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.5)
         except asyncio.CancelledError:
             print("\nClosing Contents...")
             raise
