@@ -21,6 +21,9 @@ class TextBlock:
 
         self.align()
 
+    def getPos(self, line, collum):
+        return self.lines[line][collum]
+
         
     def setSize(self, width, height):
         self.width = width
