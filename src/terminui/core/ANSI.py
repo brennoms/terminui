@@ -47,6 +47,21 @@ class ANSI:
     }
 
     # =========================
+    # Util
+    # =========================
+    @staticmethod
+    def super_formated_text(text, line, collum, bg='white', fg='black', bold=False, italic=False, underline=False):
+        text = ANSI.bg(text, bg)
+        text = ANSI.color(text, fg)
+        if bold:
+            text = ANSI.bold(text)
+        if italic:
+            text = ANSI.italic(text)
+        if underline:
+            text = ANSI.underline(text)
+        return ANSI.text_pos(text, line, collum)
+
+    # =========================
     # INTERNAL
     # =========================
     @staticmethod
@@ -142,9 +157,10 @@ class ANSI:
     def move_to(row, col):
         sys.stdout.write(f"{ANSI.ESC}{row};{col}H")
         ANSI.flush()
-    
-    def text_pos(text, row, col):
-        return f'{ANSI.ESC}{row};{col}H{text}{ANSI.reset()}'
+
+    @staticmethod
+    def text_pos(text, line, collum):
+        return f'{ANSI.ESC}{line};{collum}H{text}{ANSI.reset()}'
 
     @staticmethod
     def up(n=1):
