@@ -46,4 +46,9 @@ content4.pos.x = 10
 content4.pos.y = 10
 terminui.addContent(content4)
 
+content5 = Content(35, 5, 20, 10, bg='black')
+content5_1 = Content(0, 0, 30, 2, bg='red')
+content5.addContent(content5_1)
+terminui.addContent(content5)
+
 terminui.start()

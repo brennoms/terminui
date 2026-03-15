@@ -1,3 +1,4 @@
+from enum import verify
 import sys
 
 from terminui.core.data_content.position import Position
@@ -21,10 +22,12 @@ class Content:
 
     def addContent(self, content):
         if isinstance(content, Content):
+            content.pos.x += self.pos.x
+            content.pos.y += self.pos.y
             self._contents.append(content)
     
     def changed(self):
-        pass
+        self._reframe()
     
     def _when_position_changed(self):
         self.changed()
@@ -33,8 +36,8 @@ class Content:
         pass
 
     def _when_size_changed(self):
-        self.changed()
         self.txtblock.setSize(self.size.width, self.size.height)
+        self.changed()
         self.whenSizeChanged()
     def whenSizeChanged(self):
         pass
@@ -53,45 +56,50 @@ class Content:
 
     def _reframe(self):
         self._frame = []
-        lines = self.txtblock.lines
-        pos_y = self.pos.y
-        pos_x = self.pos.x
 
-        for i, line in enumerate(lines):
+        x = self.pos.x
+        y = self.pos.y
+        width = self.size.width
+        height = self.size.height
+
+        for line in range(height):
             l = []
-            for j, collumn in enumerate(line):
-                y = pos_y + i
-                x = pos_x + j
 
-                if y >= self.size.height+pos_y and x >= self.size.width+pos_x:
-                    continue
+            for collumn in range(width):
+                pos_x = x + collumn
+                pos_y = y + line
+                ansi = self.txtblock.getPos(line, collumn)
+                ansi = ANSI.super_formated_text(
+                    ansi, pos_y, pos_x, self.style.bg.color, 
+                    self.style.fg.color, self.style.bold,
+                    self.style.italic, self.style.underline
+                    )
+                l.append(ansi)
 
-                if i < self.pad.y or j < self.pad.x:
-                    string = ANSI.text_pos(collumn, pos_x+j, pos_y+i)
-                    l.append(string) #WIP
-                    continue
-
-                string = ANSI.bg(collumn, self.style.bg.color) #WIP
-                string = ANSI.color(string, self.style.fg.color) #WiP
-                if self.style.bold:
-                    string = ANSI.bold(string)
-                if self.style.italic:
-                    string = ANSI.itallic(string)
-                if self.style.underline:
-                    string = ANSI.underline(string)
-                string = ANSI.text_pos(string, y, x)
-
-                sys.stdout.write(string)
-                l.append(string)
             self._frame.append(l)
 
+    def render(self, restriction=None):
+
+        def verify_in(line, collumn, restriction):
+            if line >= restriction.pos.y and collumn >= restriction.pos.x:
+                if line < restriction.pos.y + restriction.size.height and collumn < restriction.pos.x + restriction.size.width:
+                    return True
+
+        buffer = []
+        for l, line in enumerate(self._frame):
+            for c, collumn in enumerate(line):
+                if restriction == None:
+                    buffer.append(collumn)
+                elif verify_in(self.pos.y+l, self.pos.x+c, restriction):
+                        buffer.append(collumn)
+
+        sys.stdout.write("".join(buffer))
+
+        for content in self._contents:
+            content.render(self)
+        
         sys.stdout.flush()
 
-    def render(self):
-        self._reframe()
-        for content in self._contents:
-            if isinstance(content, Content):
-                content.render()
 
 if __name__ == "__main__":
     content = Content()
